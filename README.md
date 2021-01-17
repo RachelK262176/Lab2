@@ -1,4 +1,4 @@
-# mycakeshop
+# my_cake_shop
 
 A new Flutter project.
 

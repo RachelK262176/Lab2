@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mycakeshop/mainscreen.dart';
-import 'package:mycakeshop/registerscreen.dart';
+import 'package:my_cake_shop/mainscreen.dart';
+import 'package:my_cake_shop/registerscreen.dart';
+import 'package:my_cake_shop/user.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -20,9 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
   SharedPreferences prefs;
   bool _passwordVisible = false;
-
   final _formKey = GlobalKey<FormState>();
-  final _passwordFieldKey = GlobalKey<FormFieldState<String>>();
 
   @override
   void initState() {
@@ -35,8 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return WillPopScope(
         onWillPop: _onBackPressAppBar,
         child: Scaffold(
-            backgroundColor: Colors.yellow[100],
-            //resizeToAvoidBottomPadding: false,
+            backgroundColor: Colors.yellow[50],
             body: new Container(
                 padding: EdgeInsets.all(30.0),
                 child: Form(
@@ -46,120 +44,134 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          height: 30,
+                          height: 25,
                         ),
                         Image.asset(
-                          'assets/images/MyCakeShop.png',
+                          'assets/images/MyCakeShop1.png',
                           scale: 0.6,
                         ),
-                        TextFormField(
-                            controller: _emcontroller,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                                labelText: 'Email',
-                                labelStyle: TextStyle(
-                                  fontSize: 18,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                                icon: Icon(Icons.email, color: Colors.red)),
-                            textInputAction: TextInputAction.next,
-                            validator: (_email) {
-                              Pattern pattern =
-                                  r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$";
-                              RegExp regex = new RegExp(pattern);
-                              if (!regex.hasMatch(_email))
-                                return 'Invalid Email';
-                              else if (_email.isEmpty)
-                                return 'Please enter your Email';
-                              else
-                                return null;
-                            },
-                            onSaved: (String email) {
-                              _email = email;
-                            }),
-                        TextFormField(
-                            key: _passwordFieldKey,
-                            controller: _pscontroller,
-                            decoration: InputDecoration(
-                              labelText: 'Password',
-                              labelStyle: TextStyle(
-                                fontSize: 18,
-                                fontStyle: FontStyle.italic,
-                              ),
-                              icon: Icon(Icons.lock, color: Colors.red),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _passwordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _passwordVisible = !_passwordVisible;
-                                  });
-                                },
-                              ),
-                            ),
-                            obscureText: _passwordVisible,
-                            textInputAction: TextInputAction.done,
-                            validator: (password) {
-                              Pattern pattern =
-                                  r'^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$';
-                              RegExp regex = new RegExp(pattern);
-                              if (!regex.hasMatch(password))
-                                return 'Invalid password';
-                              else if (_password.isEmpty)
-                                return 'Please enter your Password';
-                              else
-                                return null;
-                            },
-                            onSaved: (String password) {
-                              _password = password;
-                            }),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0)),
-                          minWidth: 300,
-                          height: 50,
-                          child: Text('LOGIN', style: TextStyle(fontSize: 18)),
-                          color: Colors.black,
-                          textColor: Colors.amber[200],
+                        Card(
+                          color: Colors.yellow[100],
                           elevation: 15,
-                          onPressed: _onLogin,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Checkbox(
-                              value: _rememberMe,
-                              onChanged: (bool value) {
-                                _onChange(value);
-                              },
-                            ),
-                            Text('Remember Me', style: TextStyle(fontSize: 18))
-                          ],
-                        ),
-                        GestureDetector(
-                            onTap: _onRegister,
-                            child: Text('Register New Account',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontStyle: FontStyle.italic))),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        GestureDetector(
-                            onTap: _onForgot,
-                            child: Text('Forgot Account',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontStyle: FontStyle.italic))),
+                          child: Padding(
+                              padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+                              child: Column(children: [
+                                TextFormField(
+                                    controller: _emcontroller,
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: InputDecoration(
+                                        labelText: 'Email',
+                                        labelStyle: TextStyle(
+                                          fontSize: 20,
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                        icon: Icon(Icons.email,
+                                            color: Colors.red)),
+                                    textInputAction: TextInputAction.next,
+                                    validator: (_email) {
+                                      Pattern pattern =
+                                          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$";
+                                      RegExp regex = new RegExp(pattern);
+                                      if (!regex.hasMatch(_email))
+                                        return 'Invalid Email';
+                                      else if (_email.isEmpty)
+                                        return 'Please enter your Email';
+                                      else
+                                        return null;
+                                    },
+                                    onSaved: (String email) {
+                                      _email = email;
+                                    }),
+                                TextFormField(
+                                    // key: _passwordFieldKey,
+                                    controller: _pscontroller,
+                                    decoration: InputDecoration(
+                                      labelText: 'Password',
+                                      labelStyle: TextStyle(
+                                        fontSize: 20,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                      icon: Icon(Icons.lock, color: Colors.red),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          _passwordVisible
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _passwordVisible =
+                                                !_passwordVisible;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    obscureText: _passwordVisible,
+                                    textInputAction: TextInputAction.done,
+                                    validator: (password) {
+                                      Pattern pattern =
+                                          r'^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$';
+                                      RegExp regex = new RegExp(pattern);
+                                      if (!regex.hasMatch(password))
+                                        return 'Invalid password';
+                                      else if (_password.isEmpty)
+                                        return 'Please enter your Password';
+                                      else
+                                        return null;
+                                    },
+                                    onSaved: (String password) {
+                                      _password = password;
+                                    }),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                MaterialButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.0)),
+                                  minWidth: 300,
+                                  height: 50,
+                                  child: Text('LOGIN',
+                                      style: TextStyle(fontSize: 18)),
+                                  color: Colors.black,
+                                  textColor: Colors.amber[200],
+                                  elevation: 15,
+                                  onPressed: _onLogin,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Checkbox(
+                                      value: _rememberMe,
+                                      onChanged: (bool value) {
+                                        _onChange(value);
+                                      },
+                                    ),
+                                    Text('Remember Me',
+                                        style: TextStyle(fontSize: 18))
+                                  ],
+                                ),
+                                GestureDetector(
+                                    onTap: _onRegister,
+                                    child: Text('Register New Account',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontStyle: FontStyle.italic))),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                GestureDetector(
+                                    onTap: _onForgot,
+                                    child: Text('Forgot Account',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontStyle: FontStyle.italic))),
+                              ])),
+                        )
                       ],
                     ),
                   ),
@@ -189,10 +201,16 @@ class _LoginScreenState extends State<LoginScreen> {
             duration: Toast.LENGTH_LONG,
             gravity: Toast.TOP,
           );
-          Navigator.push(
+          User user = new User(
+              email: _email,
+              name: userdata[1],
+              password: _password,
+              phone: userdata[2],
+              datereg: userdata[3]);
+          Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => MainScreen()));
+                  builder: (BuildContext context) => MainScreen(user: user)));
         } else {
           Toast.show(
             "Login failed",
@@ -220,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onForgot() {
-    print('Forgot');
+    print('Please register the new one');
   }
 
   void _onChange(bool value) {

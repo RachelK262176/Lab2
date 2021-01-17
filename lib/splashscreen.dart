@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mycakeshop/loginscreen.dart';
+import 'package:my_cake_shop/loginscreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
               Colors.amber[200]
             ])),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset('assets/images/MyCakeShop.png', scale: 0.6),
+          Image.asset('assets/images/MyCakeShop1.png', scale: 0.6),
           SizedBox(height: 10),
           new ProgressIndicator(),
         ]),

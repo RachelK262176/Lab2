@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mycakeshop/loginscreen.dart';
+import 'package:my_cake_shop/loginscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   SizedBox(height: 15),
                   Image.asset(
-                    'assets/images/MyCakeShop.png',
+                    'assets/images/MyCakeShop1.png',
                     scale: 0.7,
                   ),
                   TextFormField(
@@ -152,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onSaved: (String password) {
                         _password = password;
                       }),
-                  // SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Row(
                     children: <Widget>[
                       Checkbox(
@@ -172,6 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             value: _termAndCondition,
                             onChanged: (bool value) {
                               _onChange1(value);
+                              state.didChange(value);
                             },
                           ),
                           Row(
@@ -180,14 +181,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Text('I agree the ',
                                   style: TextStyle(fontSize: 16)),
                               GestureDetector(
-                                onTap: _termCondition,
-                                child: Text('Term and Condition',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.normal,
-                                        color: Colors.blueAccent)),
-                              )
+                                  onTap: _termCondition,
+                                  child: Text('Term and Condition',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          fontStyle: FontStyle.normal,
+                                          color: Colors.blueAccent))),
                             ],
                           )
                         ])
@@ -211,7 +211,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: Colors.black,
                     textColor: Colors.amber[200],
                     elevation: 15,
-                    onPressed: _confirm, //_onRegister,
+                    onPressed: _confirm,
                   ),
                   SizedBox(height: 12),
                   GestureDetector(
@@ -223,7 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ))));
   }
 
-  Future<void> _onRegister() async {
+  void _onRegister() async {
     Navigator.pop(context);
 
     if (_formKey.currentState.validate()) {
@@ -288,7 +288,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
-  Future<void> savepref() async {
+  void savepref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _email = _emcontroller.text;
     _password = _pscontroller.text;
@@ -302,7 +302,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text('Confirmation Message'),
+          title: new Text('Confirmation Message',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           content: new Text(
               'Are you sure you want to register? Please make sure your information is correct.'),
           actions: <Widget>[

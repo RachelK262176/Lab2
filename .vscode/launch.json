@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "mycakeshop",
+            "name": "my_cake_shop",
             "request": "launch",
             "type": "dart",
             "program": "lib/splashscreen.dart"
